@@ -1,9 +1,10 @@
-import os
-import math
-from datetime import datetime
-import numpy as np
 import cv2
-from skimage.measure import compare_ssim
+import math
+import numpy as np
+import os
+
+from datetime import datetime
+from skimage.metrics import structural_similarity
 from torchvision.utils import make_grid
 
 #####################################################################
@@ -81,4 +82,9 @@ def psnr(img1, img2):
 
 def ssim(img1, img2, multichannel=False):
     assert img1.dtype == img2.dtype == np.uint8, 'np.uint8 is supposed.'
-    return compare_ssim(img1, img2, multichannel=multichannel)
+    # Change the shape from (n, n, 1) to (n, n)
+    if len(img1.shape) == 3 and img1.shape[2] == 1:
+        img1 = img1.squeeze()
+    if len(img2.shape) == 3 and img2.shape[2] == 1:
+        img2 = img2.squeeze()
+    return structural_similarity(img1, img2, multichannel=multichannel)
