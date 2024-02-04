@@ -1,21 +1,24 @@
+import json
 import os
+import re
+
 from collections import OrderedDict
 from datetime import datetime
-import json
 
 def get_timestamp():
     return datetime.now().strftime('%y%m%d-%H%M%S')
 
 def parse(opt_path):
     # load settings
-    json_str = ''
-    with open(opt_path, 'r') as f:
-        for line in f:
-            line = line.split('//')[0] + '\n'
-            json_str += line
+    with open(opt_path, "r") as f:
+        # Read as a whole
+        json_str = ''.join(f.readlines())
+        # Remove comments
+        json_str = re.sub(r"\s+?//[\w\s.,_\":/\\\{\}]+?\n", "\n", json_str)
+    # Parse
     opt = json.loads(json_str, object_pairs_hook=OrderedDict)
     opt['timestamp'] = get_timestamp()
-    scale = opt['scale']
+    scale = opt.get('scale', 3)
 
     # datasets
     for phase, dataset in opt['datasets'].items():
@@ -40,7 +43,7 @@ def parse(opt_path):
     for key, path in opt['path'].items():
         if path and key in opt['path']:
             opt['path'][key] = os.path.expanduser(path)
-    if opt['is_train']:
+    if opt.get('is_train', False):
         experiments_root = os.path.join(opt['path']['root'], opt['name'])
         opt['path']['experiments_root'] = experiments_root
         opt['path']['models'] = os.path.join(experiments_root, 'models')
