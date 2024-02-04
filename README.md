@@ -70,12 +70,12 @@ GPU: cuda 8.0.
 Python 3.6.3 (Recommend to use Anaconda)  
 Packages: 
 ```
-pip install torch-0.4.1-cp36-cp36m-manylinux1_x86_64.whl
-pip install torchvision-0.2.1-py2.py3-none-any.whl
+pip install torchvision==0.15.2 torchaudio==2.0.2 torchtext==0.15.2 torchdata==0.6.1
+pip install torch==2.0.1
 pip install opencv-python
-pip install opencv-contrib-pytho
+pip install opencv-contrib-python
 pip install lmdb
-pip install scikit_image-0.13.1-cp36-cp36m-manylinux1_x86_64.whl
+pip install scikit_image
 pip install tensorboard-logger
 ```
 (some .whl packages can be found here: [Google Cloud Disk](https://drive.google.com/drive/folders/1uYOMtNC_xYw9OGuaAs3COAg3fUURdSbH?usp=sharing))
